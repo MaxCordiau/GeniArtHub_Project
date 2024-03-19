@@ -52,6 +52,29 @@ function populateData(product){
        document.querySelector('.showprice').textContent = `${product.declinaisons[index].prix} €`
     })
 }
+// Fonction pour ajouter un produit au panier sur un localStorage en prenant en compte la quantité la taille et le prix, et limiter a 100 le nombre d'element dans le pannier 
+function addToCart(){
+    const select = document.querySelector('#format')
+    const index = select.options[select.selectedIndex].dataset.index
+    const quantity = document.querySelector('#quantity').value
+    const product = {
+        id: id,
+        title: document.querySelector('h1').textContent,
+        size: select.value,
+        price: document.querySelector('.showprice').textContent,
+        quantity: quantity
+    }
+    let cart = JSON.parse(localStorage.getItem('cart')) || []
+    if(cart.length < 100){
+        cart.push(product)
+        localStorage.setItem('cart', JSON.stringify(cart))
+        alert('Produit ajouté au panier')
+    }else{
+        alert('Le panier est plein')
+    }
+}
+
+
 
 // let datas = []
 

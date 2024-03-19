@@ -1,7 +1,17 @@
 // JavaScript pour ajouter des articles au panier
 
+// recuperer les données du localstorage
+let cart = JSON.parse(localStorage.getItem('cart')) || []
+// afficher le nombre d'articles dans le panier
+document.querySelector('.cart span').textContent = cart.length
+// affiche le contenu du panier avec titre, nom, prix, quantité
+const cartItemsElement = document.querySelector('.cart-items')
+
+
+
+
 // Supposons que vous avez un tableau d'objets représentant les articles dans le panier
-var cartItems = [
+let cartItems = [
     {
         image: "artwork1.jpg",
         title: "Titre de l'œuvre 1",
@@ -20,12 +30,10 @@ var cartItems = [
     }
 ];
 
-// Sélection de l'élément du panier
-var cartItemsElement = document.querySelector('.cart-items');
 
 // Ajout des articles au panier
 cartItems.forEach(function(item) {
-    var itemElement = document.createElement('div');
+    let itemElement = document.createElement('div');
     itemElement.classList.add('cart-item');
     
     itemElement.innerHTML = `
