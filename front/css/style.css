@@ -3,6 +3,11 @@ html {
     --scroll-behavior: smooth;
     scroll-behavior: smooth;
 }
+p {
+    margin: auto;
+    padding: auto;
+    white-space: break-spaces;
+}
 .row {
     max-width: 1440px;
     margin:auto;

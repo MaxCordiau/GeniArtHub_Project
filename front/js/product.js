@@ -1,27 +1,82 @@
+// Récupérer l'id dans l'url
+const urlParams = new URLSearchParams(window.location.search)
+const id = urlParams.get('id')
+
+// Fonction init
+async function init(){
+    const data = await getDatas()
+    populateData(data)
+}
+init()
+// Fonction pour faire l'appel à l'API : /products/id
+async function getDatas(){
+    const req = await fetch(`http://localhost:3000/api/products/${id}`)
+    return await req.json()
+}
+
+// Fonction pour injecter les données dans le DOM
+function populateData(product){
+    // Changer le title de la page
+    document.title = product.titre + " - GeniArtHub"
+    // Changer l'image .detailoeuvre img
+    document.querySelector('.detailoeuvre img').src = product.image
+    // Changer le alt de l'image .detailoeuvre img
+    document.querySelector('.detailoeuvre img').alt = product.titre
+    // Changer le titre h1 de la page
+    document.querySelector('h1').textContent = product.titre
+    // Changer le contenu de la description courte (prendre la description et la tronquer à 200 caractères)
+    document.querySelector('article > div > p').textContent = `${product.description.substring(0, 200)}...`
+
+    // changer le prix en prenant le prix de la premiere declinaison 
+    document.querySelector('.showprice').textContent = `${product.declinaisons[0].prix} €`
+
+    // Changer le contenu du bouton (.button-buy) en affichant "Buy + shorttitle"
+    document.querySelector('.button-buy').textContent = `Buy ${product.shorttitle}`
+
+    // Changer le contenu du h2 en affichant "Description de l'oeuvre : + titre"
+    document.querySelector('h2').textContent = `Description de l'oeuvre : ${product.titre}`
+
+    // Changer le contenu de la description longue (aside > p)
+    document.querySelector('aside > p').textContent = product.description
+
+    // Récupérer le champ select #format, parcourir les déclinaisons et remplir le champ avec les options
+    const select = document.querySelector('#format')
+    product.declinaisons.forEach((declinaison, index) => {
+       const option = `<option data-index="${index}" value="${declinaison.taille}">Format : ${declinaison.taille}</option>`
+       select.insertAdjacentHTML('beforeend', option)
+    })
+
+    // Ajouter un eventListener sur le champ select #format
+    select.addEventListener('change', (e) => {
+       const index = select.options[select.selectedIndex].dataset.index
+       document.querySelector('.showprice').textContent = `${product.declinaisons[index].prix} €`
+    })
+}
+
 // let datas = []
 
 // const url = new URL(window.location.href);
 // const id = url.searchParams.get("id");
+// console.log(id)
 
 
-// async function init(){
-//     if (id) {
-//         datas = await getDatas(id);
-//     } else {
-//         console.error("L'id n'existe pas, id: ", id);
-//     }
-//     console.log(id)
-//     console.log(datas);
-//     // populatData();
-// }
-// // async function init(){
-// //     datas = await getDatas()
-// //     console.log(datas)
-// //     populatData()
+// // async function init() {
+// //     if (id) {
+// //         datas = await getDatas(id);
+// //         console.log(datas)
+// //         populatData(); // Appel à populatData une fois les données récupérées
+// //     } else {
+// //         console.error("L'id n'existe pas, id: ", id);
+// //     }
 // // }
-// init()
+// async function init(){
+//         const datas = await getDatas()
+//         populatData(datas)
+//         console.log(datas)
+//     }
+// init(); // Appel de la fonction init pour démarrer le processus
 
-// async function getDatas(id) {
+// async function getDatas() {
 //     const req = await fetch(`http://localhost:3000/api/products/${id}`);
 //     return await req.json();
 // }
@@ -29,141 +84,36 @@
 // //     const req = await fetch(`http://localhost:3000/api/products/`)
 // //     return await req.json()
 // // }
-// getDatas()
 
 
+// console.log(getDatas(id));
 
-// const populatData = () => {
+// function populatData(el){
+//     // const el = datas[id]
+//     document.title = el.title
+//     // for (const el of datas ) {
 //     const detailoeuvreElement = document.querySelector(".detailoeuvre");
-//     for (const el of datas) {
-//         console.log(el._id);
-//         const articleElement = document.createElement("article");
-//         articleElement.innerHTML = `
-//             <figure>
-//                 <img src=${el.image} alt="${el.titre}">
-//             </figure>
-//             <div>
-//                 <h1>${el.titre}</h1>
-//                 <p>${el.description}</p>
-//                 <div class="price">
-//                     <p>Acheter pour</p>
-//                     <span class="showprice">${el.declinaisons.prix}</span>
-//                 </div>
-//                 <div class="declinaison">
-//                     <input type="number" name="quantity" id="quantity" placeholder="1" value="1" minlength="1">
-//                     <select name="format" id="format">
-//                     </select>
-//                 </div>
-//                 <a class="button-buy" href="#">Buy ${el.shorttitle}</a>
-//             </div>
-//         `;
-
-//         const asideElement = document.createElement("aside");
-//         asideElement.innerHTML = `<h2>Description de l’oeuvre : ${el.titre}</h2>`;
-
-//         detailoeuvreElement.appendChild(articleElement);
-//         detailoeuvreElement.appendChild(asideElement);
-//     }
+//     document.querySelector("img").src=el.image
+//     document.querySelector("img").alt=el.image
+//     document.querySelector("h1").textContent=el.titre
+//     document.querySelector("p").textContent=el.description.substring(0, 200)
+//     document.querySelector(".showprice").textContent=el.declinaison[0].prix + " €"
+//     document.querySelector(".button-buy").textContent=`Buy ${el.shorttitle}`
+//     document.querySelector("h2").textContent=`Description de l’oeuvre :  ${el.titre}`
+//     document.querySelector(".button-buy").textContent="buy" + el.shorttitle
+//     document.querySelector(".aside > p").textContent=el.description
+//     const select = document.querySelector("#format")
+//     el.declinaison.forEach((declinaison, index) =>{
+//         const option = `<option data-index="" value="${declinaison.taille}"> format : ${declinaison.taille}</option>`
+//         select.insertAdjacentHTML("beforeend", option)
+//     })
+//     select.addEventListener("change", (e)=>{
+//         const index = select.option[select.selectedIndex].dataset.index
+//         document.querySelector(".showprice").textContent=el.declinaison[index].prix + " €"
+//     })
+//     // }
+    
+//     // getDatas()
+//     // populatData();
+//     // 
 // }
-// populatData();
-
-// // console.log(el._id)
-
-// // const populatData = ()=>{
-// //     datas.forEach(el =>{
-
-// //         console.log(el._id)
-
-// //         document.querySelector("img").innerHTML+=`src=${el.image} alt="${el.titre}"`
-// //         document.querySelector("h1").innerHTML+=el.titre
-// //         document.querySelector("p").innerHTML+=el.description
-// //         document.querySelector(".showprice").innerHTML+=el.declinaisons.prix
-// //         document.querySelector(".button-buy").innerHTML+=`Buy ${el.shorttitle}`
-// //         document.querySelector("h2").innerHTML+=`Description de l’oeuvre :  ${el.titre}`
-
-// //         document.querySelector(".detailoeuvre").innerHTML=
-// //         `
-// //         <section class="detailoeuvre">
-// //         <article>
-// //             <figure>
-// //                 <img src=${el.image} alt="${el.titre}">
-// //             </figure>
-// //             <div>
-// //                 <h1>${el.titre}</h1>
-// //                 <p>${el.description}</p>
-// //                 <div class="price">
-// //                     <p>Acheter pour</p>
-// //                     <span class="showprice">${el.declinaisons.prix}</span>
-// //                 </div>
-// //                 <div class="declinaison">
-// //                     <input type="number" name="quantity" id="quantity" placeholder="1" value="1" minlength="1">
-// //                     <select name="format" id="format">
-// //                     </select>
-// //                 </div>
-// //                 <a class="button-buy" href="#">Buy ${el.shorttitle}</a>
-// //             </div>
-// //         </article>
-    
-// //         <aside>
-// //             <h2>Description de l’oeuvre :  ${el.titre}</h2>
-// //         </aside>
-// //     </section>
-// //         `
-// //     })}
-    
-
-
-let datas = [];
-
-const url = new URL(window.location.href);
-const id = url.searchParams.get("id");
-
-async function init() {
-    if (id) {
-        datas = await getDatas(id);
-        console.log(datas);
-        populatData(); // Appel à populatData une fois les données récupérées
-    } else {
-        console.error("L'id n'existe pas, id: ", id);
-    }
-}
-
-async function getDatas(id) {
-    const req = await fetch(`http://localhost:3000/api/products/${id}`);
-    return await req.json();
-}
-
-const populatData = () => {
-    const detailoeuvreElement = document.querySelector(".detailoeuvre");
-    for (const el of datas) {
-        console.log(el._id);
-        const articleElement = document.createElement("article");
-        articleElement.innerHTML = `
-            <figure>
-                <img src=${el.image} alt="${el.titre}">
-            </figure>
-            <div>
-                <h1>${el.titre}</h1>
-                <p>${el.description}</p>
-                <div class="price">
-                    <p>Acheter pour</p>
-                    <span class="showprice">${el.declinaisons.prix}</span>
-                </div>
-                <div class="declinaison">
-                    <input type="number" name="quantity" id="quantity" placeholder="1" value="1" minlength="1">
-                    <select name="format" id="format">
-                    </select>
-                </div>
-                <a class="button-buy" href="#">Buy ${el.shorttitle}</a>
-            </div>
-        `;
-
-        const asideElement = document.createElement("aside");
-        asideElement.innerHTML = `<h2>Description de l’oeuvre : ${el.titre}</h2>`;
-
-        detailoeuvreElement.appendChild(articleElement);
-        detailoeuvreElement.appendChild(asideElement);
-    }
-}
-
-init(); // Appel de la fonction init pour démarrer le processus
