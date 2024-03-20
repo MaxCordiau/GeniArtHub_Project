@@ -42,23 +42,26 @@ function populateData(product){
     // Récupérer le champ select #format, parcourir les déclinaisons et remplir le champ avec les options
     const select = document.querySelector('#format')
     product.declinaisons.forEach((declinaison, index) => {
-       const option = `<option data-index="${index}" value="${declinaison.taille}">Format : ${declinaison.taille}</option>`
-       select.insertAdjacentHTML('beforeend', option)
+        const option = `<option data-index="${index}" value="${declinaison.taille}">Format : ${declinaison.taille}</option>`
+        select.insertAdjacentHTML('beforeend', option)
     })
 
     // Ajouter un eventListener sur le champ select #format
     select.addEventListener('change', (e) => {
-       const index = select.options[select.selectedIndex].dataset.index
-       document.querySelector('.showprice').textContent = `${product.declinaisons[index].prix} €`
+        const index = select.options[select.selectedIndex].dataset.index
+        document.querySelector('.showprice').textContent = `${product.declinaisons[index].prix} €`
     })
 }
 // Fonction pour ajouter un produit au panier sur un localStorage en prenant en compte la quantité la taille et le prix, et limiter a 100 le nombre d'element dans le pannier 
 function addToCart(){
+    
+
     const select = document.querySelector('#format')
     const index = select.options[select.selectedIndex].dataset.index
     const quantity = document.querySelector('#quantity').value
     const product = {
         id: id,
+        image: product.image,
         title: document.querySelector('h1').textContent,
         size: select.value,
         price: document.querySelector('.showprice').textContent,
@@ -69,11 +72,31 @@ function addToCart(){
         cart.push(product)
         localStorage.setItem('cart', JSON.stringify(cart))
         alert('Produit ajouté au panier')
+        console.log("Produit ajouté au panier")
+
     }else{
         alert('Le panier est plein')
     }
 }
+document.querySelector('.button-buy').addEventListener('click', addToCart)
+document.querySelector('.button-buy').addEventListener('click', () => {
+console.log(JSON.parse(localStorage.getItem('cart')))
+})        
+// ont affiche le contenu du localstorage dans la console
+    // ont ajoute un event listener sur le bouton buy
+    
 
+    // quand le bouton est cliqué, ont crée un local storage pour stocker le pannier et ont crée un objet pour stocker les informations du produit
+    // ont crée une variable cart pour stocker les informations du produit dans le local storage
+    // ont ajoute le produit dans le panier
+    // ont stocke le panier dans le local storage
+    // ont affiche une alerte pour dire que le produit a été ajouté au panier
+    // ont affiche dans la console que le produit a été ajouté au panier
+    // si le panier est plein ont affiche une alerte pour dire que le panier est plein
+// au clique du boutton buy ont envois le local storage dans la console
+// document.querySelector('.button-buy').addEventListener('click', () => {
+//     console.log(JSON.parse(localStorage.getItem('cart')))
+// })
 
 
 // let datas = []
