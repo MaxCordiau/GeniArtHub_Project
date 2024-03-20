@@ -61,7 +61,7 @@ function addToCart(){
     const quantity = document.querySelector('#quantity').value
     const product = {
         id: id,
-        image: product.image,
+        image: document.querySelector('.detailoeuvre img').src,
         title: document.querySelector('h1').textContent,
         size: select.value,
         price: document.querySelector('.showprice').textContent,
