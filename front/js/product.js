@@ -63,6 +63,7 @@ function addToCart(){
         id: id,
         image: document.querySelector('.detailoeuvre img').src,
         title: document.querySelector('h1').textContent,
+        description: document.querySelector('article > div > p').textContent,
         size: select.value,
         price: document.querySelector('.showprice').textContent,
         quantity: quantity

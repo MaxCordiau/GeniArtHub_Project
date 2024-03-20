@@ -48,6 +48,7 @@ cartItems.forEach(function(item) {
             <button style="background:red" class="remove-item" data-index="${cartItems.indexOf(item)}">Supprimer</button>
         </div>
     `;
+    // document.querySelector('.description').textContent = `${item.description.substring(0, 200)}...`
     document.querySelector('.total-price').textContent = totalPrice.toFixed(2);
     // Ajouter l'élément de l'article à l'élément de la liste des articles du panier
     cartItemsElement.appendChild(itemElement);
