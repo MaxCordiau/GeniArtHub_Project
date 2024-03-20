@@ -40,52 +40,96 @@ function populateData(product){
     document.querySelector('aside > p').textContent = product.description
 
     // Récupérer le champ select #format, parcourir les déclinaisons et remplir le champ avec les options
-    const select = document.querySelector('#format')
+    const size = document.querySelector('#format')
     product.declinaisons.forEach((declinaison, index) => {
         const option = `<option data-index="${index}" value="${declinaison.taille}">Format : ${declinaison.taille}</option>`
-        select.insertAdjacentHTML('beforeend', option)
+        size.insertAdjacentHTML('beforeend', option)
     })
 
     // Ajouter un eventListener sur le champ select #format
-    select.addEventListener('change', (e) => {
-        const index = select.options[select.selectedIndex].dataset.index
+    size.addEventListener('change', (e) => {
+        const index = size.options[size.selectedIndex].dataset.index
         document.querySelector('.showprice').textContent = `${product.declinaisons[index].prix} €`
     })
 }
 // Fonction pour ajouter un produit au panier sur un localStorage en prenant en compte la quantité la taille et le prix, et limiter a 100 le nombre d'element dans le pannier 
-function addToCart(){
-    
 
-    const select = document.querySelector('#format')
-    const index = select.options[select.selectedIndex].dataset.index
-    const quantity = document.querySelector('#quantity').value
-    const product = {
-        id: id,
-        image: document.querySelector('.detailoeuvre img').src,
-        title: document.querySelector('h1').textContent,
-        description: document.querySelector('article > div > p').textContent,
-        size: select.value,
-        price: document.querySelector('.showprice').textContent,
-        quantity: quantity
-    }
-    let cart = JSON.parse(localStorage.getItem('cart')) || []
-    if(cart.length < 100){
-        cart.push(product)
-        localStorage.setItem('cart', JSON.stringify(cart))
-        alert('Produit ajouté au panier')
-        console.log("Produit ajouté au panier")
 
-    }else{
-        alert('Le panier est plein')
-    }
-}
-document.querySelector('.button-buy').addEventListener('click', addToCart)
 document.querySelector('.button-buy').addEventListener('click', () => {
-console.log(JSON.parse(localStorage.getItem('cart')))
+    // function addToCart(){
+        const cart = JSON.parse(localStorage.getItem('cart')) || []
+
+        localStorage.setItem('cart', JSON.stringify(cart)) || []
+
+        const existeProduct = cart.findIndex((el) => el.id === product.id && el.size === product.size)
+
+        const size = document.querySelector('#format')
+        
+        const index = size.options[size.selectedIndex].dataset.index
+
+        const quantity = document.querySelector('#quantity').value
+
+        const product = {
+            id: id,
+            image: document.querySelector('.detailoeuvre img').src,
+            title: document.querySelector('h1').textContent,
+            description: document.querySelector('article > div > p').textContent,
+            size: size.value,
+            // price: document.querySelector('.showprice').textContent,
+            quantity: quantity,
+            index: index
+        }
+        showinfo("Produit ajouté au panier")
+
+        if (quantity <= 0){
+            showinfo("la quantité doit être supérieur à 0")
+            return
+        }
+        if (quantity > 100){
+            showinfo("la quantité doit être inferieur à 100")
+            return
+        }
+
+        if (existeProduct === -1) {
+            cart.push(product);
+            localStorage.setItem('cart', JSON.stringify(cart));
+            alert('Produit ajouté au panier');
+            console.log("Produit ajouté au panier");
+        } else {
+            cart[existeProduct].quantity = parseInt(cart[existeProduct].quantity) + parseInt(product.quantity);
+            localStorage.setItem('cart', JSON.stringify(cart));
+            alert('Quantité mise à jour dans le panier');
+            console.log("Quantité mise à jour dans le panier");
+        }
+        
+
+        if(existeProduct !== -1){
+            const currauntQuantity = parseInt(cart[existeProduct].quantity)
+            const newQuantity = currauntQuantity + parseInt(product.quantity)
+            if (newQuantity > 100){
+                showinfo("la quantité doit être inferieur à 100")
+                return
+            }
+            cart[existeProduct].quantity = newQuantity
+            localStorage.setItem('cart', JSON.stringify(cart))
+            showinfo('Produit ajouté au panier')
+        }
+
+        // if(cart.length < 100){
+        //     cart.push(product)
+        //     alert('Produit ajouté au panier')
+        //     console.log("Produit ajouté au panier")
+
+        // }else{
+        //     alert('Le panier est plein')
+        // }
+    // }
+    // document.querySelector('.button-buy').addEventListener('click', addToCart)
+    console.log(JSON.parse(localStorage.getItem('cart')))
 })        
 // ont affiche le contenu du localstorage dans la console
-    // ont ajoute un event listener sur le bouton buy
-    
+// ont ajoute un event listener sur le bouton buy
+
 
     // quand le bouton est cliqué, ont crée un local storage pour stocker le pannier et ont crée un objet pour stocker les informations du produit
     // ont crée une variable cart pour stocker les informations du produit dans le local storage
