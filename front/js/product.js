@@ -61,14 +61,13 @@ document.querySelector('.button-buy').addEventListener('click', () => {
 
         localStorage.setItem('cart', JSON.stringify(cart)) || []
 
-        const existeProduct = cart.findIndex((el) => el.id === product.id && el.size === product.size)
-
+        
         const size = document.querySelector('#format')
         
         const index = size.options[size.selectedIndex].dataset.index
-
+        
         const quantity = document.querySelector('#quantity').value
-
+        
         const product = {
             id: id,
             image: document.querySelector('.detailoeuvre img').src,
@@ -81,6 +80,8 @@ document.querySelector('.button-buy').addEventListener('click', () => {
         }
         showinfo("Produit ajouté au panier")
 
+        const existeProduct = cart.findIndex((el) => el.id === product.id && el.size === product.size)
+        
         if (quantity <= 0){
             showinfo("la quantité doit être supérieur à 0")
             return
@@ -92,12 +93,12 @@ document.querySelector('.button-buy').addEventListener('click', () => {
 
         if (existeProduct === -1) {
             cart.push(product);
-            localStorage.setItem('cart', JSON.stringify(cart));
+            localStorage.setItem('cart', JSON.stringify(cart),numberItem());
             alert('Produit ajouté au panier');
             console.log("Produit ajouté au panier");
         } else {
             cart[existeProduct].quantity = parseInt(cart[existeProduct].quantity) + parseInt(product.quantity);
-            localStorage.setItem('cart', JSON.stringify(cart));
+            localStorage.setItem('cart', JSON.stringify(cart),numberItem());
             alert('Quantité mise à jour dans le panier');
             console.log("Quantité mise à jour dans le panier");
         }
@@ -111,7 +112,7 @@ document.querySelector('.button-buy').addEventListener('click', () => {
                 return
             }
             cart[existeProduct].quantity = newQuantity
-            localStorage.setItem('cart', JSON.stringify(cart))
+            localStorage.setItem('cart', JSON.stringify(cart),numberItem())
             showinfo('Produit ajouté au panier')
         }
 
@@ -126,7 +127,9 @@ document.querySelector('.button-buy').addEventListener('click', () => {
     // }
     // document.querySelector('.button-buy').addEventListener('click', addToCart)
     console.log(JSON.parse(localStorage.getItem('cart')))
-})        
+})      
+console.log(JSON.parse(localStorage.getItem('cart'))) 
+console.log(localStorage) 
 // ont affiche le contenu du localstorage dans la console
 // ont ajoute un event listener sur le bouton buy
 
