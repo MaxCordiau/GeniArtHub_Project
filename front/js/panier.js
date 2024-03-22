@@ -15,19 +15,20 @@ function totalQuantity(){
     } 
 }
 totalQuantity()
+
 document.querySelector('.total-quantity').textContent = totalQuantity();
 
-let totalPrice = 0;
-cartItems.forEach(function(el) {
-    // Vérifier si le prix et la quantité sont valides
-    const price = parseFloat(el.index.price);
-    const quantity = parseInt(el.quantity);
-    if (!isNaN(price) && !isNaN(quantity)) {
-        // Calculer le prix total pour l'article
-        const totalPrice = price * quantity;
-        console.log("Prix total article : ",totalPrice)
-        return totalPrice;
-    }});
+// let totalPrix = 0;
+// cartItems.forEach(function(el) {
+//     // Vérifier si le prix et la quantité sont valides
+//     const prix = parseFloat(el.index.prix);
+//     const quantity = parseInt(el.quantity);
+//     if (!isNaN(prix) && !isNaN(quantity)) {
+//         // Calculer le prix total pour l'article
+//         const totalprix = prix * quantity;
+//         console.log("Prix total article : ",totalprix)
+//         return totalprix;
+//     }});
     
 let totalPannier = 0;
 cartItems.forEach(function(el) {
@@ -38,15 +39,19 @@ cartItems.forEach(function(el) {
         const totalPannier = totalPrice * quantity;
 }});
 
-async function displayCart(){
+    let el = cartItems
 // Ajoutez un élément pour chaque article du panier
+// async function req_data(el){
+    const req = fetch(`http://localhost:3000/api/products/${el.id}`);
+    const data = req.json();
+    let format = data.declinaisons[el.data_index];
+    //stocker le prix dans une variable
+    let prix = format.prix;
+    
+    // let el = cartItems[0];
+
     cartItems.forEach(async el => {
-        const req = await fetch(`http://localhost:3000/api/products/${el.id}`);
-        const data = await req.json();
         // chercher item.data_index dans datas.declinaisons
-        let format = data.declinaisons[el.data_index];
-        //stocker le prix dans une variable
-        let price = format.index;
         // Créer un élément de div pour chaque article
         let itemElement = document.createElement('div');
         itemElement.classList.add('cart-item');
@@ -54,14 +59,14 @@ async function displayCart(){
         itemElement.innerHTML = `
             <img src="${el.image}" alt="${el.title}">
             <div class="el-details">
-                <h4>${el.title}</h4>
-                <p>Description: ${el.description}</p>
-                <p>Taille: ${el.size}</p>
-                <div>
-                <p>Quantité: <input type="number" value="${el.quantity}" data-id="${el.id}" data-format="${el.quantity}" min="1"></p>
-                </div>
-                <p>Prix unitaire: $${el.price}</p>
-                <button class="remove-el" data-index="${cartItems.indexOf(el)}">Supprimer</button>
+            <h4>${el.title}</h4>
+            <p>Description: ${el.description}</p>
+            <p>Taille: ${el.size}</p>
+            <div>
+            <p>Quantité: <input type="number" value="${el.quantity}" data-id="${el.id}" data-format="${el.quantity}" min="1"></p>
+            </div>
+            <p>Prix unitaire: $${prix}</p>
+            <button class="remove-el" data-index="${cartItems.indexOf(el)}">Supprimer</button>
             </div>
         `;
         // document.querySelector('.description').textContent = `${item.description.substring(0, 200)}...`
@@ -71,8 +76,8 @@ async function displayCart(){
         cartItemsElement.appendChild(itemElement);
         // Ajouter l'élément de l'article à l'élément de la liste des articles du panier
     });
-}
-displayCart()
+// }
+// req_data()
 // async function displayCart(){
 //     // parcourir chacun des articles du pannier
 //     totalPannier.forEach(async el => {

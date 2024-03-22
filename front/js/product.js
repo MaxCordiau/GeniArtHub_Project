@@ -88,7 +88,7 @@ button.addEventListener("click", (e) => {
             title: document.querySelector('h1').textContent,
             description: document.querySelector('article > div > p').textContent,
             size: format,
-            // price: document.querySelector('.showprice').textContent,
+            prix: document.querySelector('.showprice').textContent,
             quantity: quantity,
             indexPrice: formatInput.options[formatInput.selectedIndex].dataset.index
         })
@@ -112,7 +112,6 @@ button.addEventListener("click", (e) => {
         localStorage.setItem("cart", JSON.stringify(panier))
         numberItem()
         showInfos("Produit ajouté au panier")
-
     }
 })
 
