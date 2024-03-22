@@ -216,3 +216,19 @@ footer {
 .artwork img:hover {
     transform: scale(1.1);
 }
+
+.remove-item {
+    display: inline-block;
+    padding: 5px 10px;
+    background-color: red; /* Couleur de fond */
+    color: #fff; /* Couleur du texte */
+    border: none; /* Supprime les bordures */
+    border-radius: 20px; /* Courbure des coins */
+    cursor: pointer; /* Curseur de type pointeur au survol */
+    text-decoration: none; /* Supprime le soulignement du texte */
+}
+
+/* Style du bouton au survol */
+.remove-item:hover {
+    background-color: #ca00009d; /* Changement de couleur de fond au survol */
+}
